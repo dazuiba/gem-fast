@@ -28,7 +28,11 @@ module GemFast
      private
    
      def bak
-       FileUtils.cp(gem_bin_file, gem_bin_file+".bak")
+       begin
+         FileUtils.cp(gem_bin_file, gem_bin_file+".bak")
+       rescue Errno::EACCES => e
+         error "Permission denied. Please use sudo, cause I need write your gem file"
+       end
      end
    
      def gem_bin_file
