@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+$LOAD_PATH.unshift(File.dirname(__FILE__) + '/../lib')
+
+def display(msg)
+  STDOUT.print msg
+  STDOUT.flush
+end
+
+display "loading"
+require 'rubygems'
+display "..."
+require 'gem-fast/command'
+display "...\n"
+
+
+at_exit{display "\n"}
+
+args = ARGV.dup
+ARGV.clear
+command = args.shift.strip rescue 'help'
+
+GemFast::Command.run(command, args)
