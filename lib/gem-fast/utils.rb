@@ -1,10 +1,6 @@
 module GemFast
   module Util
     include Gem::UserInteraction
-    def detect_download_strategy url
-      CurlDownloadStrategy
-    end
-
 
     def curl *args
       safe_system 'curl', '-f#LA', RUBYGEMPLUS_USER_AGENT, *args unless args.empty?
@@ -15,14 +11,9 @@ module GemFast
     end
 
     def system cmd, *args
-      #puts "#{cmd} #{args*' '}"
-      fork do
-        yield if block_given?
-        args.collect!{|arg| arg.to_s}
-        exec(cmd, *args) rescue nil
-        exit! 1 # never gets here unless exec failed
-      end
-      Process.wait
+      yield if block_given?
+      args.collect!{|arg| arg.to_s}
+      `#{cmd} #{args.join(" ")}`
       $?.success?
     end
 

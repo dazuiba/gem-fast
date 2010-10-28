@@ -1,5 +1,5 @@
 module GemFast
-  class GemFastRemoteFetcher < Gem::RemoteFetcher 
+  class RemoteFetcher < Gem::RemoteFetcher 
     
     def download(spec, source_uri, install_dir = Gem.dir)
       return super unless scheme_supported?(source_uri)
@@ -7,11 +7,11 @@ module GemFast
     end
     
     def fetch_path(uri, mtime = nil, head = false)
-       
       return super unless scheme_supported?(uri)
       
       path = CurlUnsafeDownloadStrategy.new(uri,nil).fetch
-      data = IO.read(path)
+      data = nil
+      File.open(path, "rb"){|f|data = f.read}
       data = Gem.gunzip data if data and not head and uri.to_s =~ /gz$/
       data
     end
