@@ -3,9 +3,25 @@ module GemFast
     include Gem::UserInteraction
 
     def curl *args
-      safe_system 'curl', '-f#LA', RUBYGEMPLUS_USER_AGENT, *args unless args.empty?
+      begin
+        safe_system 'curl', '-f#LA', RUBYGEMPLUS_USER_AGENT, *args unless args.empty?
+      rescue ExecutionError => e
+        if GemFast.curl?
+          raise e
+        else
+          not_install_curl
+        end
+      rescue Errno::ENOENT => e  
+        not_install_curl
+      end
+      
     end
-
+    
+    def not_install_curl
+      alert_error("use: 'gem uninstall gem-fast' to return back, Curl not installed on your mathine!")
+      exit(1)
+    end
+    
     def safe_system cmd, *args
       raise ExecutionError.new(cmd, args, $?)  unless system(cmd, *args)
     end
