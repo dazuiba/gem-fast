@@ -3,7 +3,7 @@
 Gem-fast, let your gem installation swing!
 see this blog: [为 gem install 按上翅膀 -- gem-fast](http://www.cnblogs.com/dazuiba/archive/2010/10/28/1863904.html)
 
-![Screen cast](http://images.cnblogs.com/cnblogs_com/dazuiba//NewImage.jpg "gem-fast")
+![Screen cast](http://images.cnblogs.com/cnblogs_com/dazuiba//gem-fast-1.jpg "gem-fast")
 
 
 # Known Issue:
