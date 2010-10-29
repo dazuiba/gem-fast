@@ -10,9 +10,9 @@ see this blog: [为 gem install 按上翅膀 -- gem-fast](http://www.cnblogs.com
 
 1. Sometimes We need to expire local cache, i.e: latest_specs.4.8.gz
 2. When user cancel an installation, local cache is hafe-downloaded, this will break the next installation
-3. check curl installation before install gem-fast.gem \
-   I need add a pre_install_book to Gem, but Rubygems have an bug here\
-   see: http://help.rubygems.org/discussions/problems/378-gempre_install-does-not-working-as-it-named
+3. check curl installation before install gem-fast.gem  
+I need add a pre_install_book to Gem, but Rubygems have an bug here  
+see: [Gem.pre_install-does-not-working-as-it-named](http://help.rubygems.org/discussions/problems/378-gempre_install-does-not-working-as-it-named)
 
 # TODO:
 
