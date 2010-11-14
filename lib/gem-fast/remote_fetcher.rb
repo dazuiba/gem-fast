@@ -3,6 +3,14 @@ module GemFast
     
     def download(spec, source_uri, install_dir = Gem.dir)
       return super unless scheme_supported?(source_uri)
+
+      #Fix issue #1
+      if source_uri =~/gems\.github\.com/ 
+        source_uri = "http://gems.rubyforge.org/" 
+      end 
+      if !source_uri =~/\/$/ 
+        source_uri = source_uri + "/" 
+      end 
       CurlUnsafeDownloadStrategy.new(source_uri + "gems/#{spec.file_name}", spec.file_name).fetch
     end
     
