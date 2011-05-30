@@ -3,13 +3,15 @@ module GemFast
     
     def download(spec, source_uri, install_dir = Gem.dir)
       return super unless scheme_supported?(source_uri)
-
+      source_uri = source_uri.to_s
       #Fix issue #1
       if source_uri =~/gems\.github\.com/ 
         source_uri = "http://gems.rubyforge.org/" 
       end 
-      if !source_uri =~/\/$/ 
-        source_uri = source_uri + "/" 
+
+      if source_uri =~/\/$/ 
+      else
+        source_uri << "/"
       end 
       CurlUnsafeDownloadStrategy.new(source_uri + "gems/#{spec.file_name}", spec.file_name).fetch
     end
@@ -67,7 +69,7 @@ module GemFast
     end
 
     def quiet_safe_system *args
-      safe_system *expand_safe_system_args(args)
+      safe_system(*expand_safe_system_args(args))
     end
   end
 
@@ -91,8 +93,13 @@ module GemFast
     def _fetch
       curl @url, '-o', @tarball_path
     end
-
+    
+    
     def fetch
+      if fetch_lastest_specs
+        return @tarball_path
+      end
+      
       say "Downloading #{@url}"
       unless File.exist?(@tarball_path)
         begin
@@ -108,6 +115,26 @@ module GemFast
     end
   
   private
+    
+    def fetch_lastest_specs
+      if @url.to_s =~ /\/latest_specs\.(.+)\.gz$/ && latest_specs_too_old?
+        say "lastest_specs too old, updating..."
+        say "Downloading #{@url}"
+        _fetch
+        true
+      else
+        false
+      end
+    end
+    
+    def latest_specs_too_old?
+      if file = Dir[File.join(RUBYGEMPLUS_CACHE,"latest_specs.*.gz")].first
+        (Time.now - File.stat(file).ctime)/(3600*24) > 7
+      else
+        false
+      end
+    end
+  
     def chdir
       entries=Dir['*']
       case entries.length
