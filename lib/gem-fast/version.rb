@@ -1,3 +1,3 @@
 module GemFast
-  VERSION = '0.0.6.1'
+  VERSION = '0.0.6.3'
 end
